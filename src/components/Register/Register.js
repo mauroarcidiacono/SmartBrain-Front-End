@@ -1,4 +1,7 @@
 import React from "react";
+import validator from 'validator';
+import PasswordStrengthBar from 'react-password-strength-bar';
+import "./Register.css";
 
 class Register extends React.Component {
     constructor(props) {
@@ -6,7 +9,11 @@ class Register extends React.Component {
         this.state = {
             email: '',
             password: '',
-            name: ''
+            passwordRepeat:'',
+            name: '',
+            wrongEmail: false,
+            wrongPassword: false,
+            wrongPasswordRepeat: false
         }
     }
 
@@ -22,23 +29,40 @@ class Register extends React.Component {
         this.setState({password: event.target.value})
     }
 
+    onPasswordRepeatChange = (event) => {
+        this.setState({passwordRepeat: event.target.value})
+    }
+
     onSubmitSignIn = () => {
-        fetch('http://localhost:3000/register', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password,
-                name: this.state.name
-            })
-        })
-            .then(response => response.json())
-            .then(user => {
-                if (user.id) {
-                    this.props.loadUser(user);
-                    this.props.onRouteChange('home');
+        this.setState({wrongEmail: false, wrongPassword: false, wrongPasswordRepeat: false});
+        if (validator.isEmail(this.state.email)) {
+            if (validator.isStrongPassword(this.state.password)) {
+                if (this.state.password === this.state.passwordRepeat) {
+                fetch('http://localhost:3000/register', {
+                    method: 'post',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        email: this.state.email,
+                        password: this.state.password,
+                        name: this.state.name
+                    })
+                })
+                    .then(response => response.json())
+                    .then(user => {
+                        if (user.id) {
+                            this.props.loadUser(user);
+                            this.props.onRouteChange('home');
+                        }
+                    })
+                } else {
+                    this.setState({wrongPasswordRepeat: true});
                 }
-            })
+            } else {
+                this.setState({wrongPassword: true});
+            }
+        } else {
+            this.setState({wrongEmail: true});
+        } 
     }
 
     render() {
@@ -67,6 +91,10 @@ class Register extends React.Component {
                         id="email-address"
                         onChange={this.onEmailChange}
                     />
+                    { this.state.wrongEmail 
+                    ? <div class="f6 lh-copy">Invalid email. Please correct it and try again.</div>
+                    : null
+                    }
                 </div>
                 <div className="mv3">
                     <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
@@ -77,7 +105,29 @@ class Register extends React.Component {
                         id="password"
                         onChange={this.onPasswordChange}
                     />
+                    <PasswordStrengthBar style={{ color: 'white' }} password={this.state.password} />
                 </div>
+                <div className="mv3">
+                    <label className="db fw6 lh-copy f6" htmlFor="password">Repeat password</label>
+                    <input 
+                        className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
+                        type="password" 
+                        name="repeatPassword"  
+                        id="repeatPassword"
+                        onChange={this.onPasswordRepeatChange}
+                    />
+                </div>
+                { this.state.wrongPassword 
+                    ? <div class="f6 lh-copy">
+                        Invalid password. The password must be at least 8 characters long, include numbers, 
+                        upper and lower case letters and a symbol. 
+                      </div>
+                    : null
+                }
+                { this.state.wrongPasswordRepeat
+                    ? <div class="f6 lh-copy">The passwords do not match. Please, try again.</div>
+                    : null
+                }
                 </fieldset>
                 <div className="">
                     <input
