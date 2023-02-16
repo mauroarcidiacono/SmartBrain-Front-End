@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# SmartBrain Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Introduction
+SmartBrain is a web application where users can submit pictures URLs to detect faces. To submit a picture, first you have to register yourself in the app. The web app is capable of detecting multiple faces in a picture. In each profile, the number of submissions are registered as entries. 
 
-## Available Scripts
+The tech stack used to develop this application is the following:
+-	React.js
+-	Node.js
+-	Express.js
+-	PostgreSQL  
 
-In the project directory, you can run:
+### Front end
+The front end was developed using React.js and it fetches data from the Clarifais API face detection AI to display boxes in faces. The components of the React front end are:
+  1.	FaceRecognition: displays the submitted image and draws boxes where faces where detected. 
+  2.	ImageLinkForm: displays the form to input URLs. 
+  3.	Logo: this node displays the brain logo with the react-parallax-tilt npm package to produce movement when the user places the mouse cursor on top of it.
+  4.	Navigation: deals with the navigation bar in the website, showing Sign out or Sign in and Register according to the App.js state. 
+  5.	Rank: element that deals with the display of the number of entries in each users profile. 
+  6.	Register: displays the registration form and performs checks on email and passwords validity using the npm package validator. Additionally, it renders a password strength bar with the package react-password-strength-bar.
+  7.	Sign in: deals with the sign in form and validates the input by fetching the data from the back end.  
 
-### `npm start`
+### Back end
+The server is a RESTful API built with Express.js and that uses knex to connect to the PostgreSQL database. The passwords are protected with bcrypt and stored securely using a hashing algorithm in the database. The back end uses four controllers to handle the different requests and respond accordingly:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  1.	image: increases the number of entries in the user profile in the database and responds with the updated entries value. 
+  2.	profile: responds with the user information from the database. 
+  3.	register: stores the user registration data in the database. 
+  4.	signin: validates the sign in information by comparing the submitted data with the databases data. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The web application is deployed in Heroku where I created a PostgreSQL database. The relational database has two tables: login and users. The users table contains the ID (primary key), name, email, entries and joined columns. The login table contains three columns, the ID (primary key), password hash and email. Since the email column was declared as a unique and not null column, the joins can be performed using this attribute. 
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
