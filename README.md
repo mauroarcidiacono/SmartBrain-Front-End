@@ -20,7 +20,7 @@ The front end was developed using React.js and it fetches data from the Clarifai
   7.	Sign in: deals with the sign in form and validates the input by fetching the data from the back end.  
 
 ### [Back end](https://github.com/mauroarcidiacono/SmartBrain-Back-End)
-The server is a RESTful API built with Express.js and that uses knex to connect to the PostgreSQL database. The passwords are protected with bcrypt and stored securely using a hashing algorithm in the database. The back end uses four controllers to handle the different requests and respond accordingly:
+The server is a RESTful API built with Express.js that uses knex to connect to the PostgreSQL database. The passwords are protected with bcrypt and stored securely using a hashing algorithm in the database. The back end uses four controllers to handle the different requests and respond accordingly:
 
   1.	image: increases the number of entries in the user profile in the database and responds with the updated entries value. 
   2.	profile: responds with the user information from the database. 
